@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LibraX – Minor Project Report | MCA Sem III</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4f46e5; --secondary: #f59e0b; --text: #1e293b;
+      --text-light: #64748b; --border: #e2e8f0; --bg: #f8fafc; --bg-card: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.75; }
+    h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; line-height: 1.3; }
+
+    /* Cover Page */
+    .cover { background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem 2rem; position: relative; overflow: hidden; }
+    .cover::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse at 30% 30%, rgba(99,102,241,0.15) 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(245,158,11,0.1) 0%, transparent 60%); }
+    .cover-content { position: relative; z-index: 1; max-width: 700px; }
+    .cover-badge { display: inline-block; border: 1px solid rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); border-radius: 99px; padding: 0.35rem 1rem; font-size: 0.8rem; color: #818cf8; margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .cover-logo { font-size: 4rem; margin-bottom: 1rem; }
+    .cover h1 { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #818cf8, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+    .cover-subtitle { font-size: 1.1rem; color: #94a3b8; margin-bottom: 3rem; }
+    .cover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; margin-bottom: 2rem; }
+    .cover-meta-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 1rem 1.25rem; }
+    .cover-meta-item .label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .cover-meta-item .value { color: #e2e8f0; font-weight: 600; font-size: 0.9rem; }
+    .cover-college { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; color: #64748b; font-size: 0.85rem; }
+    .cover-college strong { color: #94a3b8; display: block; font-size: 1rem; margin-bottom: 0.25rem; }
+
+    /* Report Body */
+    .report-body { max-width: 850px; margin: 0 auto; padding: 3rem 2rem; }
+
+    /* Chapter */
+    .chapter { margin-bottom: 3rem; page-break-before: auto; }
+    .chapter-num { color: var(--primary); font-size: 0.8rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+    .chapter h2 { font-size: 1.8rem; color: var(--text); border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: inline-block; }
+
+    h3 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+    p { margin-bottom: 0.9rem; color: var(--text-light); }
+    ul, ol { margin: 0.75rem 0 1rem 1.5rem; color: var(--text-light); }
+    li { margin-bottom: 0.35rem; }
+
+    /* Table of Contents */
+    .toc { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 3rem; }
+    .toc h2 { font-size: 1.3rem; margin-bottom: 1.25rem; color: var(--text); }
+    .toc-item { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
+    .toc-item:last-child { border-bottom: none; }
+    .toc-item .toc-title { color: var(--text); font-weight: 500; }
+    .toc-item .toc-num { color: var(--text-light); font-size: 0.8rem; }
+    .toc-item .toc-dots { flex: 1; border-bottom: 1px dotted var(--border); margin: 0 0.75rem; }
+
+    /* Cards/Boxes */
+    .info-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 8px; padding: 1.1rem 1.25rem; margin: 1rem 0; }
+    .warn-box { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid var(--secondary); border-radius: 8px; padding: 1.1rem 1.25rem; margin: 1rem 0; }
+    .success-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #10b981; border-radius: 8px; padding: 1.1rem 1.25rem; margin: 1rem 0; }
+
+    /* Feature Grid */
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+    .feature-card .feat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+    .feature-card h4 { font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--text); }
+    .feature-card p { font-size: 0.82rem; margin: 0; }
+
+    /* Tech Stack */
+    .tech-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    .tech-table th { background: var(--primary); color: #fff; padding: 0.65rem 1rem; text-align: left; font-size: 0.82rem; font-weight: 600; }
+    .tech-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: var(--text-light); }
+    .tech-table tr:last-child td { border-bottom: none; }
+    .tech-table tr:nth-child(even) { background: var(--bg); }
+
+    /* DFD */
+    .dfd-box { background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 2rem; margin: 1rem 0; font-family: monospace; font-size: 0.82rem; line-height: 1.8; color: var(--text); white-space: pre; overflow-x: auto; }
+
+    /* Screenshot Placeholder */
+    .screenshot-box { background: linear-gradient(135deg, #0f0f1a, #1a1a2e); border-radius: 12px; padding: 2.5rem; text-align: center; margin: 1rem 0; color: #64748b; font-size: 0.85rem; }
+    .screenshot-box .ss-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #4f46e5; margin-bottom: 0.5rem; }
+
+    /* Print */
+    @media print {
+      .cover { min-height: auto; page-break-after: always; }
+      .chapter { page-break-inside: avoid; }
+      body { background: #fff; }
+    }
+
+    /* Page number style */
+    .page-break { page-break-before: always; }
+    .report-footer { text-align: center; color: var(--text-light); font-size: 0.8rem; border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+
+<!-- ==================== COVER PAGE ==================== -->
+<div class="cover">
+  <div class="cover-content">
+    <div class="cover-badge">MCA – Minor Project II | Semester III</div>
+    <div class="cover-logo">📚</div>
+    <h1>LibraX</h1>
+    <p class="cover-subtitle">Library Management System<br/>
+    <small style="font-size:0.9rem;color:#64748b">A Web-Based Application for Efficient Library Operations</small></p>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="label">Subject</div>
+        <div class="value">Minor Project – II</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Course</div>
+        <div class="value">MCA – Semester III</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Technology Stack</div>
+        <div class="value">HTML5 + CSS3 + JS + PHP + MySQL</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Project Type</div>
+        <div class="value">Individual (Compulsory)</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Total Marks</div>
+        <div class="value">100 Marks</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Academic Year</div>
+        <div class="value">2025 – 2026</div>
+      </div>
+    </div>
+
+    <div class="cover-college">
+      <strong>Submitted To: [Guide Name]</strong>
+      Department of Computer Science &amp; Applications<br/>
+      [Your College Name], Sangli<br/>
+      [University Name]
+    </div>
+  </div>
+</div>
+
+<!-- ==================== REPORT BODY ==================== -->
+<div class="report-body">
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <div class="toc-item"><span class="toc-title">Chapter 1 – Introduction</span><span class="toc-dots"></span><span class="toc-num">1</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 2 – Objectives</span><span class="toc-dots"></span><span class="toc-num">2</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 3 – System Analysis</span><span class="toc-dots"></span><span class="toc-num">3</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 4 – System Design (DFD, ER)</span><span class="toc-dots"></span><span class="toc-num">4</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 5 – Technology Stack</span><span class="toc-dots"></span><span class="toc-num">5</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 6 – Features &amp; Modules</span><span class="toc-dots"></span><span class="toc-num">6</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 7 – Implementation</span><span class="toc-dots"></span><span class="toc-num">7</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 8 – Testing</span><span class="toc-dots"></span><span class="toc-num">8</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 9 – Future Scope</span><span class="toc-dots"></span><span class="toc-num">9</span></div>
+    <div class="toc-item"><span class="toc-title">Chapter 10 – Conclusion</span><span class="toc-dots"></span><span class="toc-num">10</span></div>
+    <div class="toc-item"><span class="toc-title">References</span><span class="toc-dots"></span><span class="toc-num">11</span></div>
+  </div>
+
+  <!-- ===== CHAPTER 1 – INTRODUCTION ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>Introduction</h2>
+
+    <h3>1.1 Background</h3>
+    <p>A library is one of the most vital information hubs in any educational institution. It houses hundreds to thousands of books, journals, magazines, and digital resources. Managing these resources manually using paper registers is not only time-consuming but also highly error-prone and inefficient.</p>
+    <p>With the rapid advancement of information technology, automating library operations has become essential for institutions of all sizes. A <strong>Library Management System (LMS)</strong> is a software application that automates the core functions of a library — including cataloguing books, managing member records, issuing and returning books, tracking overdue books, and generating comprehensive reports.</p>
+
+    <h3>1.2 Problem Statement</h3>
+    <div class="warn-box">
+      <strong>Problem:</strong> Traditional library management relies on manual record-keeping in physical registers. This leads to:
+      <ul style="margin-top:0.5rem">
+        <li>Difficulty in locating specific books quickly</li>
+        <li>Manual errors in issue/return records</li>
+        <li>No automated tracking of overdue books or fines</li>
+        <li>Time-consuming generation of reports</li>
+        <li>Loss or damage of paper records</li>
+        <li>Inability to search across hundreds of records instantly</li>
+      </ul>
+    </div>
+
+    <h3>1.3 Proposed Solution</h3>
+    <p><strong>LibraX</strong> is a modern, web-based Library Management System designed to solve all of the above problems. It provides a fully digital, user-friendly interface for managing library operations with real-time data persistence, instant search, and automated fine calculation.</p>
+
+    <div class="success-box">
+      <strong>✅ LibraX Key Highlights:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Full-stack web application with PHP backend and MySQL database (XAMPP)</li>
+        <li>Secure PHP session-based login with MD5 password hashing</li>
+        <li>Complete Book &amp; Member management (CRUD) via RESTful PHP API</li>
+        <li>Automated book issue/return with due date tracking &amp; fine payment tracking</li>
+        <li>Auto fine calculation at ₹2 per day for overdue books</li>
+        <li>Book Reservation system for fully issued books</li>
+        <li>CSV export for all tables and reports</li>
+        <li>Overdue notifications bell in real-time</li>
+        <li>Member borrowing history modal</li>
+        <li>Dark &amp; Light mode toggle (persistent)</li>
+        <li>Real-time reports &amp; printable outputs</li>
+        <li>Data persisted in MySQL database via PDO</li>
+        <li>Modern responsive UI with glassmorphism &amp; animations</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 2 – OBJECTIVES ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>Objectives</h2>
+
+    <h3>2.1 Primary Objectives</h3>
+    <ol>
+      <li>To design and develop a fully functional, full-stack Library Management System using HTML5, CSS3, JavaScript (frontend) and PHP + MySQL (backend).</li>
+      <li>To digitize and streamline the process of book cataloguing, member registration, and book issue/return transactions.</li>
+      <li>To automate overdue tracking and fine calculation, reducing librarian workload.</li>
+      <li>To provide a comprehensive reporting module with CSV export for library administrators.</li>
+      <li>To ensure persistent data storage in a MySQL relational database using XAMPP (Apache + MySQL).</li>
+      <li>To implement a book reservation system and fine payment tracking module.</li>
+    </ol>
+
+    <h3>2.2 Secondary Objectives</h3>
+    <ul>
+      <li>To implement a responsive, modern UI that works seamlessly on desktop and mobile devices.</li>
+      <li>To incorporate real-time search functionality for quick lookup of books and members.</li>
+      <li>To provide printable report outputs for official documentation.</li>
+      <li>To demonstrate professional software development practices including modular code architecture and separation of concerns.</li>
+    </ul>
+
+    <h3>2.3 Scope of the Project</h3>
+    <div class="info-box">
+      This project covers the following scope:
+      <ul style="margin-top:0.5rem">
+        <li><strong>In Scope:</strong> Book management, member management, issue/return transactions, overdue tracking, fine calculation &amp; payment tracking, book reservation, member history, CSV export, 4 types of reports, login/authentication, notifications, dark/light theme, real-time search, MySQL database backend.</li>
+        <li><strong>Out of Scope:</strong> Email/SMS notifications, barcode scanning, member self-service portal (proposed for future scope).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 3 – SYSTEM ANALYSIS ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>System Analysis</h2>
+
+    <h3>3.1 Existing System</h3>
+    <p>Most small-to-medium libraries in educational institutions in India still use manual systems for day-to-day operations. The librarian maintains physical registers for book records, member records, and issue/return entries. Reports are generated manually at the end of each month.</p>
+    <p><strong>Disadvantages of Existing System:</strong></p>
+    <ul>
+      <li>Time-consuming search through physical registers</li>
+      <li>Human errors in data entry and calculations</li>
+      <li>No real-time availability status of books</li>
+      <li>Difficult to track overdue books across hundreds of members</li>
+      <li>Reports require significant manual effort</li>
+      <li>Data loss risk due to physical damage of records</li>
+    </ul>
+
+    <h3>3.2 Proposed System</h3>
+    <p>The proposed <strong>LibraX</strong> system replaces the manual workflow with a digital, web-based solution that:</p>
+    <ul>
+      <li>Stores all data digitally with instant retrieval</li>
+      <li>Provides real-time book availability status</li>
+      <li>Automates overdue detection and fine computation</li>
+      <li>Generates reports with a single click</li>
+      <li>Allows instant global search across all records</li>
+      <li>Runs on any device with a web browser</li>
+    </ul>
+
+    <h3>3.3 Feasibility Study</h3>
+    <table class="tech-table">
+      <thead><tr><th>Feasibility Type</th><th>Analysis</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Technical</strong></td><td>Uses HTML/CSS/JS for frontend and PHP+MySQL for backend. XAMPP provides Apache and MySQL. No special hardware required.</td><td>✅ Feasible</td></tr>
+        <tr><td><strong>Operational</strong></td><td>Simple, intuitive UI requiring minimal training for library staff.</td><td>✅ Feasible</td></tr>
+        <tr><td><strong>Economic</strong></td><td>Zero cost – built using free, open web technologies. No licenses required.</td><td>✅ Feasible</td></tr>
+        <tr><td><strong>Time</strong></td><td>Developed individually as a Minor Project. Completed within the semester timeline.</td><td>✅ Feasible</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.4 Requirements</h3>
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.95rem">Functional Requirements:</h4>
+    <ul>
+      <li>User Authentication (Login / Logout) with PHP sessions</li>
+      <li>Add, Edit, Delete Books with multi-copy support</li>
+      <li>Add, Edit, Delete Members (Student/Faculty/Staff)</li>
+      <li>Issue books to members with due date</li>
+      <li>Return books with automatic fine calculation</li>
+      <li>Fine payment tracking (mark fine as paid/unpaid)</li>
+      <li>Book reservation when all copies are issued</li>
+      <li>View member borrowing history</li>
+      <li>Overdue notifications with bell icon</li>
+      <li>View transaction history with filtering</li>
+      <li>Generate 4 types of reports + CSV export</li>
+      <li>Real-time global search</li>
+      <li>Dark / Light mode toggle</li>
+    </ul>
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.95rem">Non-Functional Requirements:</h4>
+    <ul>
+      <li>Responsive design (desktop + mobile)</li>
+      <li>Fast UI with smooth animations and loading indicators</li>
+      <li>Data persistence in MySQL relational database</li>
+      <li>RESTful PHP API with proper error handling and validation</li>
+      <li>Foreign key constraints for data integrity</li>
+    </ul>
+  </div>
+
+  <!-- ===== CHAPTER 4 – SYSTEM DESIGN ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>System Design</h2>
+
+    <h3>4.1 System Architecture</h3>
+    <p>LibraX follows a <strong>client-server architecture</strong> with a SPA-style frontend communicating with a RESTful PHP API backend. Data is stored in a MySQL database via XAMPP.</p>
+
+    <div class="dfd-box">┌──────────────── CLIENT (Browser) ────────────────┐
+│                                                  │
+│  ┌─────────────────────────────────────────────┐│
+│  │  index.html (UI Layer)                      ││
+│  │  style.css (Design System – Dark/Light)     ││
+│  └────────────────────┬────────────────────────┘│
+│                       │                          │
+│  ┌────────────────────▼────────────────────────┐│
+│  │  api.js (API Client – Fetch Wrapper)        ││
+│  │  app.js (Application Logic – All Modules)   ││
+│  └────────────────────┬────────────────────────┘│
+└───────────────────────┼──────────────────────────┘
+                        │ HTTP (fetch API)
+                        ▼
+┌──────────────── SERVER (XAMPP Apache) ────────────┐
+│                                                  │
+│  ┌─────────────────────────────────────────────┐│
+│  │  api/config.php   (DB Connection + Helpers) ││
+│  │  api/auth.php     (Login / Logout)          ││
+│  │  api/books.php    (Books CRUD)              ││
+│  │  api/members.php  (Members CRUD + History)  ││
+│  │  api/transactions.php (Issue/Return/Fine)   ││
+│  │  api/dashboard.php (Stats + Notifications)  ││
+│  └────────────────────┬────────────────────────┘│
+│                       │ PDO                      │
+│  ┌────────────────────▼────────────────────────┐│
+│  │  MySQL Database (librax_db)                 ││
+│  │  Tables: users, books, members,             ││
+│  │          transactions, reservations         ││
+│  │  Views:  v_active_transactions,             ││
+│  │          v_overdue_summary                  ││
+│  └─────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────┘</div>
+
+    <h3>4.2 Data Flow Diagram (DFD)</h3>
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.9rem">Level 0 – Context Diagram:</h4>
+    <div class="dfd-box">
+           ┌──────────┐
+           │  Admin   │
+           │(Librarian)│
+           └────┬─────┘
+                │ Login Credentials
+                │ Book/Member Data
+                │ Issue/Return Commands
+                ▼
+    ┌─────────────────────────┐
+    │                         │
+    │   LibraX LMS System     │
+    │                         │
+    └─────────┬───────────────┘
+              │ Reports
+              │ Notifications
+              │ Transaction Records
+              ▼
+           ┌──────────┐
+           │ Database │
+           │ (MySQL)  │
+           └──────────┘</div>
+
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.9rem">Level 1 – Detailed DFD:</h4>
+    <div class="dfd-box">
+ Admin ──▶ [1.0 Login] ──▶ Validate ──▶ Dashboard
+
+ Admin ──▶ [2.0 Book Mgmt]
+               ├─▶ Add Book ──▶ Books Store
+               ├─▶ Edit Book ──▶ Books Store
+               └─▶ Delete Book ──▶ Books Store
+
+ Admin ──▶ [3.0 Member Mgmt]
+               ├─▶ Add Member ──▶ Members Store
+               ├─▶ Edit Member ──▶ Members Store
+               └─▶ Delete Member ──▶ Members Store
+
+ Admin ──▶ [4.0 Issue Book]
+               ├─▶ Select Book ──▶ Books Store (available--)
+               ├─▶ Select Member ──▶ Members Store (issued++)
+               └─▶ Create Transaction ──▶ Transactions Store
+
+ Admin ──▶ [5.0 Return Book]
+               ├─▶ Select Transaction
+               ├─▶ Calculate Fine (₹2/day overdue)
+               ├─▶ Update Book (available++)
+               └─▶ Update Transaction (Returned)
+
+ Admin ──▶ [6.0 Reports]
+               ├─▶ Books Report ◀─ Books Store
+               ├─▶ Members Report ◀─ Members Store
+               ├─▶ Overdue Report ◀─ Transactions Store
+               └─▶ Transaction Report ◀─ All Stores</div>
+
+    <h3>4.3 Entity Relationship (ER) Description</h3>
+    <table class="tech-table">
+      <thead><tr><th>Entity</th><th>Attributes</th><th>Relationships</th></tr></thead>
+      <tbody>
+        <tr><td><strong>users</strong></td><td>id, username, password (MD5), name, role, created_at</td><td>System admin</td></tr>
+        <tr><td><strong>books</strong></td><td>id, book_code, title, author, category, isbn, publisher, year, total_copies, available_copies, shelf_location</td><td>One Book ↔ Many Transactions, Many Reservations</td></tr>
+        <tr><td><strong>members</strong></td><td>id, member_code, name, type, email, phone, department, enrollment_year, books_issued, status</td><td>One Member ↔ Many Transactions, Many Reservations</td></tr>
+        <tr><td><strong>transactions</strong></td><td>id, trans_code, book_id (FK), member_id (FK), issue_date, due_date, return_date, fine_amount, fine_paid, status</td><td>Belongs to Book + Member</td></tr>
+        <tr><td><strong>reservations</strong></td><td>id, reserve_code, book_id (FK), member_id (FK), reserve_date, status</td><td>Belongs to Book + Member</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.4 Module Design</h3>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="feat-icon">🔐</span>
+        <h4>Authentication Module</h4>
+        <p>Login/Logout with session management. Validates credentials against stored user list.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">📚</span>
+        <h4>Book Management Module</h4>
+        <p>Full CRUD for books. Tracks copies and availability. Supports multiple copies per title.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">👥</span>
+        <h4>Member Management Module</h4>
+        <p>Register and manage Student, Faculty, Staff members with type-based categorization.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">📤</span>
+        <h4>Issue/Return Module</h4>
+        <p>Issue books with due date. Auto-calculate fines on return. Overdue detection.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">📊</span>
+        <h4>Reports Module</h4>
+        <p>Generate 4 types of printable reports: Books, Members, Overdue, Transactions.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">🔍</span>
+        <h4>Search Module</h4>
+        <p>Real-time global search across books and members with debounced filtering.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 5 – TECHNOLOGY ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>Technology Stack</h2>
+
+    <h3>5.1 Frontend Technologies</h3>
+    <table class="tech-table">
+      <thead><tr><th>Technology</th><th>Version</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HTML5</strong></td><td>HTML5</td><td>Structure and semantic markup. Modern forms, tables, semantic elements.</td></tr>
+        <tr><td><strong>CSS3</strong></td><td>CSS3</td><td>Styling with CSS Grid, Flexbox, animations, dark/light mode via CSS variables, glassmorphism.</td></tr>
+        <tr><td><strong>JavaScript (ES6+)</strong></td><td>ES2020</td><td>Frontend logic – async/await API calls, DOM manipulation, event handling, CSV export.</td></tr>
+        <tr><td><strong>Fetch API</strong></td><td>–</td><td>Built-in browser API for making HTTP requests to PHP backend (no jQuery needed).</td></tr>
+        <tr><td><strong>Google Fonts</strong></td><td>–</td><td>Typography: Inter (body text) + Outfit (headings).</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 Backend Technologies</h3>
+    <table class="tech-table">
+      <thead><tr><th>Technology</th><th>Version</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PHP</strong></td><td>8.x</td><td>Server-side language for RESTful API endpoints. Handles all CRUD, auth, fine calculation.</td></tr>
+        <tr><td><strong>MySQL</strong></td><td>8.x</td><td>Relational database with 5 tables, foreign keys, views, seed data. Stores all application data.</td></tr>
+        <tr><td><strong>PDO</strong></td><td>–</td><td>PHP Data Objects for secure, parameterized database queries (prevents SQL injection).</td></tr>
+        <tr><td><strong>PHP Sessions</strong></td><td>–</td><td>Server-side session management for secure authentication.</td></tr>
+        <tr><td><strong>JSON</strong></td><td>–</td><td>Data interchange format between frontend JavaScript and PHP API.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.3 Tools Used</h3>
+    <table class="tech-table">
+      <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>XAMPP</strong></td><td>Local development server providing Apache (web server) + MySQL (database)</td></tr>
+        <tr><td><strong>phpMyAdmin</strong></td><td>Web-based MySQL administration tool for database management</td></tr>
+        <tr><td><strong>VS Code</strong></td><td>Primary code editor with syntax highlighting and IntelliSense</td></tr>
+        <tr><td><strong>Chrome DevTools</strong></td><td>Debugging, network inspection, testing API calls</td></tr>
+        <tr><td><strong>Git</strong></td><td>Version control for source code management</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.4 Why These Technologies?</h3>
+    <div class="info-box">
+      <ul>
+        <li><strong>HTML/CSS/JS</strong> – No framework dependencies; demonstrates strong fundamentals of web development.</li>
+        <li><strong>PHP + MySQL</strong> – Industry-standard backend stack. Demonstrates understanding of server-side programming, SQL, and relational database design.</li>
+        <li><strong>XAMPP</strong> – Free, cross-platform local server that is widely used in educational settings for PHP+MySQL development.</li>
+        <li><strong>PDO</strong> – Secure database access with parameterized queries, preventing SQL injection attacks.</li>
+        <li><strong>RESTful API</strong> – Clean separation between frontend and backend using HTTP methods (GET/POST/PUT/DELETE).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 6 – FEATURES ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 6</div>
+    <h2>Features &amp; Modules</h2>
+
+    <h3>6.1 Feature List</h3>
+    <table class="tech-table">
+      <thead><tr><th>#</th><th>Feature</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Secure Login</td><td>PHP session-based admin login with MD5 password hashing.</td></tr>
+        <tr><td>2</td><td>Dashboard</td><td>Real-time stats, category chart, monthly trend chart, fine summary, recent transactions, quick actions.</td></tr>
+        <tr><td>3</td><td>Add Book</td><td>Add books with title, author, category, ISBN, publisher, year, copies, shelf location.</td></tr>
+        <tr><td>4</td><td>Edit/Delete Book</td><td>Modify or remove book records. Delete blocked if book is currently issued (FK constraint).</td></tr>
+        <tr><td>5</td><td>Book Filtering</td><td>Filter books by category and availability status.</td></tr>
+        <tr><td>6</td><td>Add Member</td><td>Register Student/Faculty/Staff with email uniqueness validation.</td></tr>
+        <tr><td>7</td><td>Edit/Delete Member</td><td>Update details. Delete blocked if member has active issues.</td></tr>
+        <tr><td>8</td><td>Issue Book</td><td>Select available book + active member + due date. Records transaction via API.</td></tr>
+        <tr><td>9</td><td>Return Book</td><td>Auto-calculates fine (₹2/day overdue). Restores book availability.</td></tr>
+        <tr><td>10</td><td>Fine Payment Tracking</td><td>Mark fine as paid/unpaid with one click. Tracked in database.</td></tr>
+        <tr><td>11</td><td>Book Reservation</td><td>Reserve a book when all copies are currently issued. Tracks reservation status.</td></tr>
+        <tr><td>12</td><td>Member History</td><td>View all books a member has ever borrowed in a modal popup.</td></tr>
+        <tr><td>13</td><td>Overdue Notifications</td><td>Bell icon with dropdown showing all overdue books, days overdue, and member info.</td></tr>
+        <tr><td>14</td><td>Dark / Light Mode</td><td>Toggle between dark and light themes. Preference persisted in localStorage.</td></tr>
+        <tr><td>15</td><td>CSV Export</td><td>Export any table or report to CSV file with one click.</td></tr>
+        <tr><td>16</td><td>Overdue Detection</td><td>Automatic status update to "Overdue" on every API call.</td></tr>
+        <tr><td>17</td><td>Transaction History</td><td>View all transactions with filters: All / Active / Returned / Overdue.</td></tr>
+        <tr><td>18</td><td>4 Reports</td><td>Books, Members, Overdue, Transactions – all with print &amp; CSV export.</td></tr>
+        <tr><td>19</td><td>Global Search</td><td>Real-time debounced search across books and members via API.</td></tr>
+        <tr><td>20</td><td>Responsive Design</td><td>Works on desktop, tablet, mobile with collapsible sidebar.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== CHAPTER 7 – IMPLEMENTATION ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 7</div>
+    <h2>Implementation</h2>
+
+    <h3>7.1 Project Structure</h3>
+    <div class="dfd-box">Library_Management_System/
+├── index.html              ← Main SPA application
+├── css/
+│   └── style.css           ← Design system (dark + light theme)
+├── js/
+│   ├── api.js              ← API client (Fetch wrapper for PHP)
+│   └── app.js              ← Frontend application logic
+├── api/
+│   ├── config.php          ← DB connection (PDO) + helpers
+│   ├── auth.php            ← Login / Logout / Session check
+│   ├── books.php           ← Books CRUD (GET/POST/PUT/DELETE)
+│   ├── members.php         ← Members CRUD + history
+│   ├── transactions.php    ← Issue / Return / Fine / Reserve
+│   └── dashboard.php       ← Stats + notifications
+├── database/
+│   └── librax.sql          ← Full MySQL schema + seed data
+└── report/
+    └── project_report.html ← This project report</div>
+
+    <h3>7.2 Key Implementation Details</h3>
+
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.9rem">7.2.1 Data Persistence</h4>
+    <p>All data is stored in a <strong>MySQL relational database</strong> (librax_db) running on XAMPP. The PHP backend uses <strong>PDO</strong> with prepared statements for secure, parameterized queries. The database contains 5 tables (users, books, members, transactions, reservations) with proper foreign key constraints, and 2 views for overdue reporting. Auto-increment counters generate unique codes (B001, M001, T001, R001).</p>
+
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.9rem">7.2.2 Fine Calculation Logic</h4>
+    <p>The fine is calculated automatically during book return:</p>
+    <div class="info-box">
+      <strong>Formula:</strong> Fine = Max(0, (Today − Due Date in days)) × ₹2 per day<br/><br/>
+      Example: If a book was due on Oct 10 and returned on Oct 20, the overdue days = 10, fine = ₹20.
+    </div>
+
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.9rem">7.2.3 Overdue Detection</h4>
+    <p>Every time the application loads, it scans all active transactions and marks any whose due date has passed as "Overdue". This ensures the system always reflects the current state accurately.</p>
+
+    <h4 style="margin-top:1rem;margin-bottom:0.5rem;font-size:0.9rem">7.2.4 Data Integrity Guards</h4>
+    <ul>
+      <li>Books currently issued cannot be deleted</li>
+      <li>Members with active book issues cannot be deleted</li>
+      <li>A member cannot issue the same book twice</li>
+      <li>Duplicate member emails are rejected</li>
+      <li>Only available books appear in the issue dropdown</li>
+    </ul>
+
+    <h3>7.3 Screenshots</h3>
+    <div class="screenshot-box">
+      <div class="ss-label">Figure 7.1 – Login Screen</div>
+      <p style="color:#94a3b8">Secure login with username/password. Demo credentials: admin / admin123</p>
+    </div>
+    <div class="screenshot-box">
+      <div class="ss-label">Figure 7.2 – Dashboard</div>
+      <p style="color:#94a3b8">Real-time stats, category chart, recent transactions, quick action buttons</p>
+    </div>
+    <div class="screenshot-box">
+      <div class="ss-label">Figure 7.3 – Books Management</div>
+      <p style="color:#94a3b8">Book listing with filter controls, add/edit/delete actions, availability badges</p>
+    </div>
+    <div class="screenshot-box">
+      <div class="ss-label">Figure 7.4 – Issue / Return Module</div>
+      <p style="color:#94a3b8">Dual-panel form for issuing books and processing returns with automatic fine display</p>
+    </div>
+    <div class="screenshot-box">
+      <div class="ss-label">Figure 7.5 – Reports</div>
+      <p style="color:#94a3b8">One-click report generation with printable output</p>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 8 – TESTING ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 8</div>
+    <h2>Testing</h2>
+
+    <h3>8.1 Testing Approach</h3>
+    <p>The system was tested using <strong>manual black-box testing</strong>, verifying each feature against expected outputs. All major user scenarios were tested across Chrome, Firefox, and Edge browsers.</p>
+
+    <h3>8.2 Test Cases</h3>
+    <table class="tech-table">
+      <thead><tr><th>TC#</th><th>Test Case</th><th>Input</th><th>Expected Output</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>TC01</td><td>Valid Login</td><td>admin / admin123</td><td>Dashboard visible, login screen hidden</td><td>✅ Pass</td></tr>
+        <tr><td>TC02</td><td>Invalid Login</td><td>wrong / pass</td><td>Error toast: "Invalid credentials"</td><td>✅ Pass</td></tr>
+        <tr><td>TC03</td><td>Add Book</td><td>Valid book details</td><td>Book appears in table, count incremented</td><td>✅ Pass</td></tr>
+        <tr><td>TC04</td><td>Edit Book</td><td>Changed title</td><td>Updated title shown in table</td><td>✅ Pass</td></tr>
+        <tr><td>TC05</td><td>Delete Issued Book</td><td>Book with active issue</td><td>Error toast: "Cannot delete – book is currently issued"</td><td>✅ Pass</td></tr>
+        <tr><td>TC06</td><td>Add Member</td><td>Valid member details</td><td>Member appears in table</td><td>✅ Pass</td></tr>
+        <tr><td>TC07</td><td>Duplicate Email</td><td>Existing email</td><td>Error toast: "Member with email already exists"</td><td>✅ Pass</td></tr>
+        <tr><td>TC08</td><td>Issue Book</td><td>Available book + active member</td><td>Transaction created, availability decremented</td><td>✅ Pass</td></tr>
+        <tr><td>TC09</td><td>Issue Same Book Twice</td><td>Already issued book+member</td><td>Error toast: "Member already has this book"</td><td>✅ Pass</td></tr>
+        <tr><td>TC10</td><td>Return On Time</td><td>Within due date</td><td>Transaction marked Returned, no fine</td><td>✅ Pass</td></tr>
+        <tr><td>TC11</td><td>Return Overdue</td><td>Past due date</td><td>Fine = ₹2 × overdue days shown</td><td>✅ Pass</td></tr>
+        <tr><td>TC12</td><td>Global Search</td><td>"Algorithm"</td><td>Filtered book results shown</td><td>✅ Pass</td></tr>
+        <tr><td>TC13</td><td>Overdue Report</td><td>Click Generate</td><td>List of overdue books with fines</td><td>✅ Pass</td></tr>
+        <tr><td>TC14</td><td>Data Persistence</td><td>Refresh browser</td><td>All data retained from MySQL database</td><td>✅ Pass</td></tr>
+        <tr><td>TC15</td><td>Responsive Layout</td><td>Mobile viewport</td><td>Sidebar collapses, layout adjusts</td><td>✅ Pass</td></tr>
+        <tr><td>TC16</td><td>Fine Payment</td><td>Click Pay on overdue transaction</td><td>Fine marked as paid, status updated</td><td>✅ Pass</td></tr>
+        <tr><td>TC17</td><td>Book Reservation</td><td>Reserve fully issued book</td><td>Reservation created, appears in list</td><td>✅ Pass</td></tr>
+        <tr><td>TC18</td><td>CSV Export</td><td>Click Export CSV</td><td>CSV file downloaded with correct data</td><td>✅ Pass</td></tr>
+        <tr><td>TC19</td><td>Member History</td><td>Click history icon</td><td>Modal shows all past transactions</td><td>✅ Pass</td></tr>
+        <tr><td>TC20</td><td>Dark/Light Toggle</td><td>Click theme button</td><td>Theme switches, preference persists</td><td>✅ Pass</td></tr>
+      </tbody>
+    </table>
+
+    <h3>8.3 Browser Compatibility</h3>
+    <table class="tech-table">
+      <thead><tr><th>Browser</th><th>Version</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Google Chrome</td><td>120+</td><td>✅ Fully Compatible</td></tr>
+        <tr><td>Mozilla Firefox</td><td>120+</td><td>✅ Fully Compatible</td></tr>
+        <tr><td>Microsoft Edge</td><td>120+</td><td>✅ Fully Compatible</td></tr>
+        <tr><td>Safari</td><td>16+</td><td>✅ Fully Compatible</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== CHAPTER 9 – FUTURE SCOPE ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 9</div>
+    <h2>Future Scope</h2>
+
+    <p>The current version of LibraX demonstrates core library management functionality. The following enhancements are proposed for future development:</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="feat-icon">📧</span>
+        <h4>Email / SMS Notifications</h4>
+        <p>Automated email/SMS reminders to members before due date and on overdue detection using PHPMailer.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">📱</span>
+        <h4>Progressive Web App (PWA)</h4>
+        <p>Convert to PWA for offline access, push notifications, and mobile home screen installation.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">📷</span>
+        <h4>Barcode / QR Code Scanning</h4>
+        <p>Integrate barcode or QR code scanning for instant book issue and return processing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">👤</span>
+        <h4>Member Self-Service Portal</h4>
+        <p>Separate login for members to view their issued books, transaction history, and fines online.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">☁️</span>
+        <h4>Cloud Deployment</h4>
+        <p>Deploy to a cloud server (AWS, DigitalOcean) for public access beyond local network.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feat-icon">🤖</span>
+        <h4>AI Book Recommendations</h4>
+        <p>Suggest books to members based on their borrowing history using machine learning.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 10 – CONCLUSION ===== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapter 10</div>
+    <h2>Conclusion</h2>
+
+    <p>The <strong>LibraX Library Management System</strong> successfully demonstrates the development of a fully functional, full-stack web application using HTML5, CSS3, JavaScript for the frontend and PHP + MySQL for the backend — running on XAMPP.</p>
+
+    <p>The project effectively digitizes and automates the core operations of a library: book cataloguing, member management, book issue/return, overdue tracking, fine calculation &amp; payment, book reservation, comprehensive reports, and real-time notifications. The system features 20+ functional capabilities, a modern dual-theme UI, and a properly designed relational database with 5 tables and foreign key constraints.</p>
+
+    <p>Through this project, the following skills were demonstrated and applied:</p>
+    <ul>
+      <li><strong>Frontend Development:</strong> HTML5 semantic structure, CSS3 design system with dark/light modes, ES6+ async/await JavaScript</li>
+      <li><strong>Backend Development:</strong> PHP RESTful API design, PDO parameterized queries, session management</li>
+      <li><strong>Database Design:</strong> MySQL schema design with foreign keys, views, seed data, auto-increment counters</li>
+      <li><strong>Software Engineering:</strong> Client-server architecture, separation of concerns, RESTful API patterns, data integrity validation</li>
+      <li><strong>UI/UX Design:</strong> Dual-theme responsive UI with animations, notifications, and CSV export</li>
+      <li><strong>Problem-Solving:</strong> Fine calculation algorithm, overdue auto-detection, reservation system, duplicate validation</li>
+    </ul>
+
+    <div class="success-box">
+      This project fulfills all the requirements of the <strong>MCA Semester III Minor Project – II</strong> and demonstrates practical application of software development concepts studied during the MCA program.
+    </div>
+  </div>
+
+  <!-- ===== REFERENCES ===== -->
+  <div class="chapter">
+    <div class="chapter-num">References</div>
+    <h2>References</h2>
+    <ol>
+      <li>Mozilla Developer Network (MDN). <em>HTML5 Reference.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">developer.mozilla.org</a></li>
+      <li>Mozilla Developer Network (MDN). <em>CSS Reference.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">developer.mozilla.org</a></li>
+      <li>Mozilla Developer Network (MDN). <em>JavaScript Fetch API.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">developer.mozilla.org</a></li>
+      <li>PHP Official Documentation. <em>PHP: PDO.</em> <a href="https://www.php.net/manual/en/book.pdo.php">php.net</a></li>
+      <li>MySQL Official Documentation. <em>MySQL 8.0 Reference Manual.</em> <a href="https://dev.mysql.com/doc/refman/8.0/en/">dev.mysql.com</a></li>
+      <li>XAMPP. <em>Apache Friends – XAMPP.</em> <a href="https://www.apachefriends.org">apachefriends.org</a></li>
+      <li>W3Schools. <em>PHP, MySQL, HTML, CSS and JavaScript Tutorials.</em> <a href="https://www.w3schools.com">w3schools.com</a></li>
+      <li>Elmasri, R., &amp; Navathe, S. B. (2016). <em>Fundamentals of Database Systems.</em> Pearson Education.</li>
+      <li>Pressman, R. S. (2014). <em>Software Engineering: A Practitioner's Approach.</em> McGraw-Hill Education.</li>
+      <li>Google Fonts. <em>Inter &amp; Outfit Typefaces.</em> <a href="https://fonts.google.com">fonts.google.com</a></li>
+    </ol>
+  </div>
+
+  <div class="report-footer">
+    <p><strong>LibraX – Library Management System</strong> | MCA Minor Project II – Semester III</p>
+    <p style="margin-top:0.25rem">[Your Name] | [Roll No.] | [College Name] | Academic Year 2025–2026</p>
+  </div>
+</div>
+
+</body>
+</html>

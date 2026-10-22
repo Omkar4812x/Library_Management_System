@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LibraX – Library Management System</title>
+  <meta name="description" content="LibraX – A web-based Library Management System with MySQL database. MCA Minor Project II." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-bg-anim"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">📚</div>
+      <h1>LibraX</h1>
+      <p>Library Management System</p>
+    </div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" value="admin" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" value="admin123" required autocomplete="current-password" />
+        <small class="login-hint">Default: admin / admin123</small>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+        <span>Sign In</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+    <p class="login-footer">MCA – Minor Project II &nbsp;|&nbsp; Sem. III &nbsp;|&nbsp; MySQL + PHP Backend</p>
+  </div>
+</div>
+
+<!-- ==================== MAIN APP ==================== -->
+<div id="mainApp" class="app-container hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-icon-sm">📚</div>
+        <span class="logo-text">LibraX</span>
+      </div>
+      <button class="sidebar-toggle-btn" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" id="nav-dashboard" onclick="return showPage('dashboard')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-books" onclick="return showPage('books')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>Books</span>
+        <span class="nav-badge" id="navBooksCount">0</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-members" onclick="return showPage('members')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Members</span>
+        <span class="nav-badge" id="navMembersCount">0</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-issue" onclick="return showPage('issue')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Issue / Return</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-reservations" onclick="return showPage('reservations')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Reservations</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-reports" onclick="return showPage('reports')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">A</div>
+        <div class="user-details">
+          <span class="user-name">Admin</span>
+          <span class="user-role">Librarian</span>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()" title="Logout">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 class="page-title" id="pageTitle">Dashboard</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="search-bar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearch" placeholder="Search books, members…" oninput="handleGlobalSearch(this.value)" />
+        </div>
+        <!-- Notifications Bell -->
+        <div class="notif-wrapper" style="position:relative">
+          <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotifications()" title="Overdue Notifications">
+            🔔
+            <span class="notif-count hidden" id="overdueBadge">0</span>
+          </button>
+          <div class="notif-dropdown hidden" id="notifDropdown">
+            <div class="notif-header">⚠️ Overdue Books</div>
+            <div id="notificationPanel"><div class="notif-empty">Loading…</div></div>
+          </div>
+        </div>
+        <!-- Theme Toggle -->
+        <button class="topbar-icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">☀️</button>
+        <div class="topbar-date" id="topbarDate"></div>
+      </div>
+    </header>
+
+    <!-- ==================== DASHBOARD PAGE ==================== -->
+    <section id="page-dashboard" class="page active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon books">📚</div>
+          <div class="stat-info"><span class="stat-value" id="statTotalBooksVal">0</span><span class="stat-label">Total Books</span></div>
+          <div class="stat-trend up">+12%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon members">👥</div>
+          <div class="stat-info"><span class="stat-value" id="statMembersVal">0</span><span class="stat-label">Members</span></div>
+          <div class="stat-trend up">Active</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon issued">📤</div>
+          <div class="stat-info"><span class="stat-value" id="statIssuedVal">0</span><span class="stat-label">Books Issued</span></div>
+          <div class="stat-trend neutral">Active</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon available">✅</div>
+          <div class="stat-info"><span class="stat-value" id="statAvailableVal">0</span><span class="stat-label">Available</span></div>
+          <div class="stat-trend up">Ready</div>
+        </div>
+      </div>
+
+      <!-- Fine Stats Row -->
+      <div class="stats-grid" style="grid-template-columns:1fr 1fr;margin-top:0">
+        <div class="stat-card" style="--card-color: rgba(245,158,11,0.15)">
+          <div class="stat-icon" style="background:rgba(245,158,11,0.15)">💰</div>
+          <div class="stat-info"><span class="stat-value" id="statFineUnpaid">₹0</span><span class="stat-label">Fine Pending</span></div>
+          <div class="stat-trend down">Unpaid</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(16,185,129,0.15)">🏦</div>
+          <div class="stat-info"><span class="stat-value" id="statFineCollected">₹0</span><span class="stat-label">Fine Collected</span></div>
+          <div class="stat-trend up">Paid</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Transactions</h3>
+            <button class="btn btn-sm btn-outline" onclick="showPage('issue')">View All</button>
+          </div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>Book Title</th><th>Member</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="recentTransactionsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Quick Actions</h3></div>
+          <div class="card-body quick-actions">
+            <button class="quick-action-btn" onclick="openAddBookModal(); showPage('books')"><span class="qa-icon">➕</span><span>Add Book</span></button>
+            <button class="quick-action-btn" onclick="openAddMemberModal(); showPage('members')"><span class="qa-icon">👤</span><span>Add Member</span></button>
+            <button class="quick-action-btn" onclick="showPage('issue')"><span class="qa-icon">📤</span><span>Issue Book</span></button>
+            <button class="quick-action-btn" onclick="showPage('reservations')"><span class="qa-icon">🔖</span><span>Reservations</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid mt-1">
+        <div class="card">
+          <div class="card-header"><h3>📊 Category Distribution</h3></div>
+          <div class="card-body"><div class="chart-container" id="categoryChart"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>📈 Monthly Issue Trend</h3></div>
+          <div class="card-body"><div class="trend-container" id="trendChart"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BOOKS PAGE ==================== -->
+    <section id="page-books" class="page hidden">
+      <div class="page-actions">
+        <div class="filter-bar">
+          <select id="bookCategoryFilter" onchange="filterBooks()">
+            <option value="">All Categories</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Technology">Technology</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="Literature">Literature</option>
+            <option value="History">History</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Other">Other</option>
+          </select>
+          <select id="bookStatusFilter" onchange="filterBooks()">
+            <option value="">All Status</option>
+            <option value="Available">Available</option>
+            <option value="Issued">All Issued</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:0.5rem">
+          <button class="btn btn-outline" onclick="exportTableToCSV('booksTable','books')">📥 CSV</button>
+          <button class="btn btn-primary" onclick="openAddBookModal()" id="addBookBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Book
+          </button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table" id="booksTable">
+            <thead><tr><th>Book ID</th><th>Title</th><th>Author</th><th>Category</th><th>ISBN</th><th>Copies</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="booksTbody"></tbody>
+          </table>
+          <div class="empty-state hidden" id="booksEmpty"><div class="empty-icon">📚</div><p>No books found. Add your first book!</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MEMBERS PAGE ==================== -->
+    <section id="page-members" class="page hidden">
+      <div class="page-actions">
+        <div class="filter-bar">
+          <select id="memberTypeFilter" onchange="filterMembers()">
+            <option value="">All Types</option>
+            <option value="Student">Student</option>
+            <option value="Faculty">Faculty</option>
+            <option value="Staff">Staff</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:0.5rem">
+          <button class="btn btn-outline" onclick="exportTableToCSV('membersTable','members')">📥 CSV</button>
+          <button class="btn btn-primary" onclick="openAddMemberModal()" id="addMemberBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Member
+          </button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table" id="membersTable">
+            <thead><tr><th>Member ID</th><th>Name</th><th>Type</th><th>Email</th><th>Phone</th><th>Issued</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="membersTbody"></tbody>
+          </table>
+          <div class="empty-state hidden" id="membersEmpty"><div class="empty-icon">👥</div><p>No members found.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ISSUE / RETURN PAGE ==================== -->
+    <section id="page-issue" class="page hidden">
+      <div class="issue-return-grid">
+        <!-- Issue -->
+        <div class="card">
+          <div class="card-header"><h3>📤 Issue Book</h3></div>
+          <div class="card-body">
+            <form id="issueForm" onsubmit="issueBook(event)">
+              <div class="form-group"><label for="issueBookId">Select Book</label>
+                <select id="issueBookId" required><option value="">-- Choose a Book --</option></select></div>
+              <div class="form-group"><label for="issueMemberId">Select Member</label>
+                <select id="issueMemberId" required><option value="">-- Choose a Member --</option></select></div>
+              <div class="form-group"><label for="issueDueDate">Due Date</label>
+                <input type="date" id="issueDueDate" required /></div>
+              <button type="submit" class="btn btn-primary btn-full">Issue Book</button>
+            </form>
+          </div>
+        </div>
+        <!-- Return -->
+        <div class="card">
+          <div class="card-header"><h3>📥 Return Book</h3></div>
+          <div class="card-body">
+            <form id="returnForm" onsubmit="returnBook(event)">
+              <div class="form-group"><label for="returnTransactionId">Select Transaction</label>
+                <select id="returnTransactionId" required><option value="">-- Choose Active Transaction --</option></select></div>
+              <div class="form-group"><label>Return Date</label>
+                <input type="text" id="returnDate" readonly /></div>
+              <div class="fine-info hidden" id="fineInfo">
+                <div class="fine-badge">⚠️ Fine: <strong id="fineAmount">₹0</strong></div>
+              </div>
+              <button type="submit" class="btn btn-success btn-full">Return Book</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="card mt-1">
+        <div class="card-header">
+          <h3>All Transactions</h3>
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
+            <div class="tab-btns">
+              <button class="tab-btn active" id="tabAll"      onclick="filterTransactions('all')">All</button>
+              <button class="tab-btn"        id="tabActive"   onclick="filterTransactions('active')">Active</button>
+              <button class="tab-btn"        id="tabReturned" onclick="filterTransactions('returned')">Returned</button>
+              <button class="tab-btn"        id="tabOverdue"  onclick="filterTransactions('overdue')">Overdue</button>
+            </div>
+            <button class="btn btn-sm btn-outline" onclick="exportTableToCSV('transactionsTable','transactions')">📥 CSV</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="data-table" id="transactionsTable">
+            <thead><tr><th>Trans. ID</th><th>Book</th><th>Member</th><th>Issue Date</th><th>Due Date</th><th>Return Date</th><th>Fine</th><th>Status</th></tr></thead>
+            <tbody id="transactionsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESERVATIONS PAGE ==================== -->
+    <section id="page-reservations" class="page hidden">
+      <div class="issue-return-grid">
+        <div class="card">
+          <div class="card-header"><h3>🔖 Reserve a Book</h3></div>
+          <div class="card-body">
+            <form id="reserveForm" onsubmit="reserveBook(event)">
+              <div class="form-group"><label for="reserveBookId">Select Fully Issued Book</label>
+                <select id="reserveBookId" required><option value="">-- Choose a Book (All Issued) --</option></select></div>
+              <div class="form-group"><label for="reserveMemberId">Select Member</label>
+                <select id="reserveMemberId" required><option value="">-- Choose a Member --</option></select></div>
+              <div class="info-note" style="margin:0.5rem 0;padding:0.75rem;background:rgba(99,102,241,0.1);border-radius:8px;font-size:0.82rem;color:var(--text-secondary)">
+                ℹ️ Only fully issued books (0 copies available) appear here. The member will be notified when the book becomes available.
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">Reserve Book</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>ℹ️ How Reservations Work</h3></div>
+          <div class="card-body" style="color:var(--text-secondary);font-size:0.87rem;line-height:1.9">
+            <p>📌 <strong>Reserve</strong> a book when all copies are currently issued.</p>
+            <p>🔄 When a copy is <strong>returned</strong>, the reservation status updates to <em>"Book Available"</em>.</p>
+            <p>📋 The librarian can check this page to <strong>notify</strong> the waiting member.</p>
+            <p>✅ After issuing to the member, the reservation can be marked <em>Fulfilled</em>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-1">
+        <div class="card-header"><h3>📋 All Reservations</h3></div>
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>Reserve Code</th><th>Book Title</th><th>Member</th><th>Date</th><th>Book Status</th><th>Reserve Status</th></tr></thead>
+            <tbody id="reservationsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REPORTS PAGE ==================== -->
+    <section id="page-reports" class="page hidden">
+      <div class="reports-grid">
+        <div class="card report-card">
+          <div class="report-icon">📚</div>
+          <h3>Books Report</h3>
+          <p>All books with availability and category stats.</p>
+          <button class="btn btn-outline" onclick="generateBooksReport()">Generate</button>
+        </div>
+        <div class="card report-card">
+          <div class="report-icon">👥</div>
+          <h3>Members Report</h3>
+          <p>All members with borrowing summary.</p>
+          <button class="btn btn-outline" onclick="generateMembersReport()">Generate</button>
+        </div>
+        <div class="card report-card">
+          <div class="report-icon">⚠️</div>
+          <h3>Overdue Report</h3>
+          <p>Overdue books and pending fine calculation.</p>
+          <button class="btn btn-outline" onclick="generateOverdueReport()">Generate</button>
+        </div>
+        <div class="card report-card">
+          <div class="report-icon">📊</div>
+          <h3>Transaction Report</h3>
+          <p>Full history of all issue and return transactions.</p>
+          <button class="btn btn-outline" onclick="generateTransactionReport()">Generate</button>
+        </div>
+      </div>
+      <div class="card mt-1 hidden" id="reportOutput">
+        <div class="card-header">
+          <h3 id="reportTitle">Report</h3>
+          <div style="display:flex;gap:0.5rem">
+            <button class="btn btn-sm btn-outline" onclick="printReport()">🖨️ Print</button>
+          </div>
+        </div>
+        <div class="card-body" id="reportContent"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Add/Edit Book Modal -->
+<div class="modal-overlay hidden" id="bookModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="bookModalTitle">Add New Book</h3>
+      <button class="modal-close" onclick="closeModal('bookModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="bookForm" onsubmit="saveBook(event)">
+        <input type="hidden" id="bookEditId" />
+        <div class="form-row">
+          <div class="form-group"><label for="bookTitle">Book Title *</label><input type="text" id="bookTitle" placeholder="Enter book title" required /></div>
+          <div class="form-group"><label for="bookAuthor">Author *</label><input type="text" id="bookAuthor" placeholder="Author name" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="bookISBN">ISBN</label><input type="text" id="bookISBN" placeholder="978-XXXXXXXXXX" /></div>
+          <div class="form-group"><label for="bookCategory">Category *</label>
+            <select id="bookCategory" required>
+              <option value="">Select Category</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Technology">Technology</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Science">Science</option>
+              <option value="Literature">Literature</option>
+              <option value="History">History</option>
+              <option value="Fiction">Fiction</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="bookPublisher">Publisher</label><input type="text" id="bookPublisher" placeholder="Publisher name" /></div>
+          <div class="form-group"><label for="bookYear">Year Published</label><input type="number" id="bookYear" placeholder="2024" min="1800" max="2026" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="bookCopies">Number of Copies *</label><input type="number" id="bookCopies" placeholder="1" min="1" required /></div>
+          <div class="form-group"><label for="bookShelf">Shelf Location</label><input type="text" id="bookShelf" placeholder="e.g. CS-01" /></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('bookModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="bookSaveBtn">Save Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Member Modal -->
+<div class="modal-overlay hidden" id="memberModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="memberModalTitle">Add New Member</h3>
+      <button class="modal-close" onclick="closeModal('memberModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="memberForm" onsubmit="saveMember(event)">
+        <input type="hidden" id="memberEditId" />
+        <div class="form-row">
+          <div class="form-group"><label for="memberName">Full Name *</label><input type="text" id="memberName" placeholder="Full name" required /></div>
+          <div class="form-group"><label for="memberType">Type *</label>
+            <select id="memberType" required>
+              <option value="">Select Type</option>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Staff">Staff</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="memberEmail">Email *</label><input type="email" id="memberEmail" placeholder="email@example.com" required /></div>
+          <div class="form-group"><label for="memberPhone">Phone *</label><input type="tel" id="memberPhone" placeholder="9XXXXXXXXX" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="memberDept">Department / Course</label><input type="text" id="memberDept" placeholder="e.g. MCA" /></div>
+          <div class="form-group"><label for="memberYear">Enrollment Year</label><input type="number" id="memberYear" placeholder="2024" min="2000" max="2030" /></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('memberModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="memberSaveBtn">Save Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Member History Modal -->
+<div class="modal-overlay hidden" id="historyModal">
+  <div class="modal" style="max-width:780px">
+    <div class="modal-header">
+      <h3 id="historyModalTitle">Member History</h3>
+      <button class="modal-close" onclick="closeModal('historyModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <table class="data-table">
+        <thead><tr><th>Trans. ID</th><th>Book Title</th><th>Issue Date</th><th>Due Date</th><th>Return Date</th><th>Fine</th><th>Status</th></tr></thead>
+        <tbody id="historyTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay hidden" id="confirmModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>Confirm Delete</h3>
+      <button class="modal-close" onclick="closeModal('confirmModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMessage">Are you sure you want to delete this item?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
