@@ -49,14 +49,14 @@ Library_Management_System/
 └── .
 ```
 
-## Requirements
+## Requirements :
 
 - PHP 8+
 - MySQL
 - Web browser
 - Local server environment such as XAMPP or direct MySQL + PHP installation
 
-## Database Setup
+## Database Setup :
 
 1. Start MySQL.
 2. Import the SQL file:
@@ -75,7 +75,7 @@ define('DB_USER', 'root');
 define('DB_PASS', 'root');
 ```
 
-## Run the Project Locally
+## Run the Project Locally :
 
 Open PowerShell in the project folder and run:
 
@@ -90,20 +90,20 @@ Then open:
 http://localhost:8000/
 ```
 
-## Login Credentials
+## Login Credentials :
 
 ```text
 Username: admin
 Password: admin123
 ```
 
-## Notes
+## Notes "
 
 - This project is designed for local use on a personal machine.
 - It uses a local MySQL database and PHP backend.
 - The top bar date/time updates in real time.
 
-## Developer Notes
+## Developer Notes :
 
 The project was verified locally with:
 
